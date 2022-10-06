@@ -12,6 +12,10 @@ export const resolvers = {
         createJob: (_root, {input}) => {
             return Job.create(input);
         },
+        deleteJob: (_root, {id}) => Job.delete(id),
+        updateJob: (_root, {input}) => {
+            return Job.update(input);
+        },
     },
     Company: {
         jobs: (company) => Job.findAll((job) => job.companyId === company.id),
