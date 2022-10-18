@@ -29,7 +29,14 @@ app.post('/login', async (req, res) => {
 });
 
 // const typeDefs = await readFile('./schema.graphql', 'utf8')
-const context = ({req}) => ({auth: req.auth}) //sends auth token to resolvers via context 
+const context = async ({req}) => {
+  if (req.auth) {
+    const user = await User.findById(req.auth.sub);
+    return {user};
+  }
+  return {};
+} //sends auth token to resolvers via context 
+
 const apolloServer = new ApolloServer({typeDefs, resolvers, context});
 await apolloServer.start();
 apolloServer.applyMiddleware({ app, path:'/graphql' })
